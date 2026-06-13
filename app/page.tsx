@@ -1,63 +1,145 @@
-import Image from "next/image";
+'use client'
+import {Coffee, Users, LockKeyhole} from "lucide-react";
+import React, { useState } from "react";
 
 export default function Home() {
+  const amounts = [3, 5, 10];
+  const [amountSelected, setAmountSelected] = useState<number | null>(null);
+  const [customAmount, setCustomAmount] = useState<string>("");
+  const [errorMsg, setErrorMsg] = useState<string>("");
+
+  const testCards = [
+    { card: "4242 4242 4242 4242", label: "Success" },
+    { card: "4000 0000 0000 9995", label: "Declined" },
+    { card: "4000 0025 0000 3155", label: "Requires auth" },
+  ];
+
+  const handleCustomAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    const sanitizedValue = rawValue
+      .replace(/[^\d.]/g, "")
+      .replace(/^(\d*\.?\d*).*$/, "$1");
+
+    setCustomAmount(sanitizedValue);
+    setAmountSelected(null); // Deselect predefined amounts when custom amount is entered
+  };
+
+  const handlePayment = async () => {
+    console.log(`Initiating payment with amount: ${amountSelected ?? customAmount}`);
+    const amount = amountSelected ?? (customAmount ? Number(customAmount) : 0)
+
+    try {
+      const res = await fetch('/api/checkout_session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount }),
+      })
+      
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Unknown' }))
+        setErrorMsg(`Payment failed: ${err.error || 'Unknown error'}`);
+        return;
+      }
+      
+      const data = await res.json().catch(() => ({} as { url?: string }))
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setErrorMsg('Payment failed: No redirect URL');
+        return;
+      }
+    } catch (e) {
+      console.error('Payment error:', e);
+      alert('Network error');
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col flex-1 items-center justify-center bg-white font-sans dark:bg-black">
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-15 bg-zinc-50 dark:bg-black sm:items-start">
+       
+        {/* Hero section */}
+        <div className="flex flex-col w-full justify-center items-center">
+          <span className="inline-flex items-center px-5 py-5 rounded-full bg-[#D9CCC6]">
+             <Coffee className="h-12 w-12 text-zinc-600 dark:text-zinc-400" />
+          </span>
+
+          <div className="flex flex-col w-full justify-center items-center text-center mt-5 space-y-2">
+            <h1 className="text-lg font-semibold">Elise - Full Stack Developer</h1>
+            <p className="text-md">Building website, mobile app and side projects.</p>
+            
+            <div className="bg-amber-50 border border-amber-200 text-amber-800 text-sm text-center px-4 py-2 mb-5 rounded-lg">
+              <p>Demo project · Stripe test mode · No real charges</p>
+
+              <p className="font-semibold text-zinc-700 my-3">🧪 Test cards</p>
+              <div className="flex flex-col gap-2">
+                {testCards.map(({ card, label }) => (
+                  <div key={card} className="flex justify-between items-center">
+                    <code className="text-zinc-600">{card}</code>
+                    <span className="text-zinc-500">{label}</span>
+                  </div>
+                ))}
+                <p className="text-zinc-400 mt-2">Any future date · Any CVC · Any ZIP</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        
+        {/* Stripe Section */}
+        <div className="flex flex-col items-center gap-6 bg-white border border-gray-300 rounded-lg w-full text-center sm:items-start sm:text-left">
+          <div className="p-6 w-full">
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              {/* Amount */}
+              {amounts.map((amount, idx) => (
+                <div key={idx} className={`rounded-lg text-white px-5 py-2 text-center hover:cursor-pointer hover:shadow-md hover:text-black ${amountSelected === amount? 'bg-[#C57B57]' : 'bg-[#DDAD95]'}`} 
+                  onClick={() => {
+                    setAmountSelected(amount);
+                    setCustomAmount(""); // Clear custom amount when a predefined amount is selected
+                    console.log(`Selected amount: ${amount}`)
+                  }}
+                >
+                  <p>${amount}</p>
+                </div>
+              ))}
+            </div>
+            
+            {/* Custom Amount */}
+            <div className="flex flex-row items-center gap-2 mb-4">
+              <p className="text-lg text-gray-600">$</p>
+              <input className="border border-gray-300 rounded-lg w-full p-2" type="text" inputMode="decimal" value={customAmount} onChange={handleCustomAmount} placeholder="Enter a custom amount"/>
+            </div>
+                        
+            {/* Stripe */}
+            <div className="flex flex-col items-center gap-4 mt-10">
+              {errorMsg && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded">{errorMsg}</div>}
+
+              <button 
+                className={`text-center bg-[#D9CCC6] font-semibold shadow-lg rounded-lg w-75 p-2 ${!(amountSelected || customAmount) ? 'opacity-50 cursor-not-allowed' : ' hover:cursor-pointer'}`}
+                disabled={!(amountSelected || customAmount)}
+                onClick={handlePayment}
+              > 
+                Make a donation - ${amountSelected ?? customAmount}
+              </button>
+              <div className="flex flex-row items-center gap-2 text-sm text-gray-600">
+                <LockKeyhole className="h-4 w-4 text-zinc-600 dark:text-zinc-400"/>
+                <p>Secured by Stripe · No account needed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Supporters */}
+        <div className="flex flex-col mt-5 items-center gap-6 bg-white border border-gray-300 rounded-lg w-full text-center sm:items-start sm:text-left">
+          <div className="p-6">
+            <div className="flex gap-2 space-y-2 font-semibold">
+              <Users size={20}/>
+              <p>Recent Supporters</p>
+            </div>
+
+            <p>Jamie M</p>
+            <p>Alex P</p>
+            <p>Sam K</p>
+          </div>
         </div>
       </main>
     </div>
