@@ -1,5 +1,5 @@
 'use client'
-import {Coffee, Users, LockKeyhole} from "lucide-react";
+import {Coffee, LockKeyhole} from "lucide-react";
 import React, { useState } from "react";
 
 export default function Home() {
@@ -61,17 +61,19 @@ export default function Home() {
         {/* Hero section */}
         <div className="flex flex-col w-full justify-center items-center">
           <span className="inline-flex items-center px-5 py-5 rounded-full bg-[#D9CCC6]">
-             <Coffee className="h-12 w-12 text-zinc-600 dark:text-zinc-400" />
+            <Coffee className="h-12 w-12 text-zinc-600 dark:text-zinc-400" />
           </span>
 
           <div className="flex flex-col w-full justify-center items-center text-center mt-5 space-y-2">
-            <h1 className="text-lg font-semibold">Elise - Full Stack Developer</h1>
-            <p className="text-md">Building website, mobile app and side projects.</p>
-            
-            <div className="bg-amber-50 border border-amber-200 text-amber-800 text-sm text-center px-4 py-2 mb-5 rounded-lg">
+            <div className="flex flex-col items-center gap-2 mb-10">
+              <h1 className="text-lg font-semibold">Elise - Full Stack Developer</h1>
+              <p className="text-md">Building website, mobile app and side projects.</p>
+            </div>
+
+            <div className="w-full bg-amber-50 border border-amber-200 text-amber-800 text-sm text-center px-4 py-2 rounded-lg">
               <p>Demo project · Stripe test mode · No real charges</p>
 
-              <p className="font-semibold text-zinc-700 my-3">🧪 Test cards</p>
+              <p className="font-semibold text-zinc-700 my-3">💳 Test cards</p>
               <div className="flex flex-col gap-2">
                 {testCards.map(({ card, label }) => (
                   <div key={card} className="flex justify-between items-center">
@@ -125,20 +127,6 @@ export default function Home() {
                 <p>Secured by Stripe · No account needed</p>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Recent Supporters */}
-        <div className="flex flex-col mt-5 items-center gap-6 bg-white border border-gray-300 rounded-lg w-full text-center sm:items-start sm:text-left">
-          <div className="p-6">
-            <div className="flex gap-2 space-y-2 font-semibold">
-              <Users size={20}/>
-              <p>Recent Supporters</p>
-            </div>
-
-            <p>Jamie M</p>
-            <p>Alex P</p>
-            <p>Sam K</p>
           </div>
         </div>
       </main>
