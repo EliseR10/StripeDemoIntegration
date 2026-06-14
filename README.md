@@ -1,6 +1,7 @@
 # ☕ Buy Me a Coffee — Stripe Checkout Demo
  
 A simple donation-style web app built to demonstrate a Stripe Checkout integration. Users can select or enter a custom amount and complete a test payment via Stripe's hosted checkout page.
+Live on https://stripe-demo-integration.vercel.app/
  
 > **Demo project · Stripe test mode · No real charges are processed.**
  
