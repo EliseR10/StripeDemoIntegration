@@ -55,19 +55,19 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-white font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-15 bg-zinc-50 dark:bg-black sm:items-start">
+    <div className="flex flex-col flex-1 items-center justify-center bg-white font-sans">
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-5 md:px-15 bg-zinc-50 sm:items-start">
        
         {/* Hero section */}
         <div className="flex flex-col w-full justify-center items-center">
           <span className="inline-flex items-center px-5 py-5 rounded-full bg-[#D9CCC6]">
-            <Coffee className="h-12 w-12 text-zinc-600 dark:text-zinc-400" />
+            <Coffee className="h-12 w-12 text-zinc-600" />
           </span>
 
           <div className="flex flex-col w-full justify-center items-center text-center mt-5 space-y-2">
             <div className="flex flex-col items-center gap-2 mb-10">
-              <h1 className="text-lg font-semibold">Elise - Full Stack Developer</h1>
-              <p className="text-md">Building website, mobile app and side projects.</p>
+              <h1 className="text-lg font-semibold text-black">Elise - Full Stack Developer</h1>
+              <p className="text-md text-black">Building website, mobile app and side projects.</p>
             </div>
 
             <div className="w-full bg-amber-50 border border-amber-200 text-amber-800 text-sm text-center px-4 py-2 rounded-lg">
@@ -88,7 +88,7 @@ export default function Home() {
         </div>
         
         {/* Stripe Section */}
-        <div className="flex flex-col items-center gap-6 bg-white border border-gray-300 rounded-lg w-full text-center sm:items-start sm:text-left">
+        <div className="flex flex-col mt-5 items-center gap-6 bg-white border border-gray-300 rounded-lg w-full text-center sm:items-start sm:text-left">
           <div className="p-6 w-full">
             <div className="grid grid-cols-3 gap-4 mb-4">
               {/* Amount */}
@@ -108,7 +108,7 @@ export default function Home() {
             {/* Custom Amount */}
             <div className="flex flex-row items-center gap-2 mb-4">
               <p className="text-lg text-gray-600">$</p>
-              <input className="border border-gray-300 rounded-lg w-full p-2" type="text" inputMode="decimal" value={customAmount} onChange={handleCustomAmount} placeholder="Enter a custom amount"/>
+              <input className="border border-gray-300 text-gray-900 rounded-lg w-full p-2" type="text" inputMode="decimal" value={customAmount} onChange={handleCustomAmount} placeholder="Enter a custom amount"/>
             </div>
                         
             {/* Stripe */}
@@ -116,14 +116,14 @@ export default function Home() {
               {errorMsg && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded">{errorMsg}</div>}
 
               <button 
-                className={`text-center bg-[#D9CCC6] font-semibold shadow-lg rounded-lg w-75 p-2 ${!(amountSelected || customAmount) ? 'opacity-50 cursor-not-allowed' : ' hover:cursor-pointer'}`}
+                className={`text-center text-gray-900 bg-[#D9CCC6] font-semibold shadow-lg rounded-lg w-50 md:w-75 p-2 ${!(amountSelected || customAmount) ? 'opacity-50 cursor-not-allowed' : ' hover:cursor-pointer'}`}
                 disabled={!(amountSelected || customAmount)}
                 onClick={handlePayment}
               > 
                 Make a donation - ${amountSelected ?? customAmount}
               </button>
               <div className="flex flex-row items-center gap-2 text-sm text-gray-600">
-                <LockKeyhole className="h-4 w-4 text-zinc-600 dark:text-zinc-400"/>
+                <LockKeyhole className="h-4 w-4 text-zinc-600"/>
                 <p>Secured by Stripe · No account needed</p>
               </div>
             </div>
